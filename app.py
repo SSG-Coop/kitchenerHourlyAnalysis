@@ -2,6 +2,8 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 
+st.set_page_config(layout="wide")
+
 # 1. Load Data
 @st.cache_data # This keeps the app fast by caching the CSV load
 def load_data_from_gdrive(file_id):
@@ -36,6 +38,8 @@ fig = px.bar(
     title=f"Demand for {selected_zone} in Year {selected_year}",
     range_y=[0, y_limit]
 )
+
+fig.update_layout(height=800)
 
 # 5. Display Plot
 st.plotly_chart(fig, use_container_width=True)
