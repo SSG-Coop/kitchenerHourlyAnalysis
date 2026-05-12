@@ -4,12 +4,15 @@ import plotly.express as px
 
 # 1. Load Data
 @st.cache_data # This keeps the app fast by caching the CSV load
-def load_data():
-    df = pd.read_csv('df_hourly_filtered.csv') 
-    # Add your cleaning logic here (summing columns, dates, etc.)
+def load_data_from_gdrive(file_id):
+    url = f'https://drive.google.com/uc?export=download&id={file_id}'
+    df = pd.read_csv(url)
+    
     return df
 
-df = load_data()
+GOOGLE_DRIVE_FILE_ID = "1IWn9IAai4Q5dwN72HU7dVATisH_8F2Ta"
+
+df = load_data_from_gdrive(GOOGLE_DRIVE_FILE_ID)
 
 # 2. Sidebar Widgets
 st.sidebar.title("Filters")
