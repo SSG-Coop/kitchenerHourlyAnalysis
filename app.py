@@ -12,10 +12,28 @@ def load_data_from_gdrive(file_id):
     
     return df
 
+def load_large_data_from_gdrive(file_id):
+    # Construct the base Google Drive URL
+    url = f'https://drive.google.com/uc?export=download&id={file_id}'
+    
+    # Define a temporary local filename to save the download
+    output_filename = 'temp_download.csv'
+    
+    # gdown automatically handles the virus scan warning and downloads the file
+    gdown.download(url, output_filename, quiet=False)
+    
+    # Read the properly downloaded CSV into pandas
+    df = pd.read_csv(output_filename)
+    
+    # Optional: Clean up the downloaded file if you don't want to keep it locally
+    if os.path.exists(output_filename):
+        os.remove(output_filename)
+        
+    return df
+
 GOOGLE_DRIVE_FILE_ID = "1IWn9IAai4Q5dwN72HU7dVATisH_8F2Ta"
 
-df = load_data_from_gdrive(GOOGLE_DRIVE_FILE_ID)
-print(df.info())
+df = load_large_data_from_gdrive(GOOGLE_DRIVE_FILE_ID)
 
 unique_zones = df['Zone'].unique()
 reordered_zones = ['TOTAL'] + [zone for zone in unique_zones if zone != 'TOTAL']
