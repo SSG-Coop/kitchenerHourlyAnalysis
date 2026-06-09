@@ -35,16 +35,16 @@ def load_large_data_from_gdrive(file_id):
 
 # 2. Sidebar Widgets
 st.sidebar.title("Filters")
-selected_analysis = st.sidebar.selectbox("Analysis", ['Pct Chg', 'Demand'])
+# selected_analysis = st.sidebar.selectbox("Analysis", ['Pct Chg', 'Demand'])
 
-if selected_analysis == 'Pct Chg':
-    GOOGLE_DRIVE_FILE_ID = "1SAe0dahXkriO6u76K4NGQfhxEl4UnpFj"
-    yData = 'Percent_Change'
-    yaxisTitle = '%'
-else:
-    GOOGLE_DRIVE_FILE_ID = "1IWn9IAai4Q5dwN72HU7dVATisH_8F2Ta"
-    yData = 'HOURLY_DEMAND'
-    yaxisTitle = 'm3/year'
+# if selected_analysis == 'Pct Chg':
+#     GOOGLE_DRIVE_FILE_ID = "1SAe0dahXkriO6u76K4NGQfhxEl4UnpFj"
+#     yData = 'Percent_Change'
+#     yaxisTitle = '%'
+# else:
+GOOGLE_DRIVE_FILE_ID = "1IWn9IAai4Q5dwN72HU7dVATisH_8F2Ta"
+yData = 'HOURLY_DEMAND'
+yaxisTitle = 'm3/year'
 
 df = load_large_data_from_gdrive(GOOGLE_DRIVE_FILE_ID)
 
@@ -63,10 +63,10 @@ filtered_df = df[
     (df['Sector'] == selected_sector)
 ]
 
-if selected_analysis == 'Pct Chg':
-    chart_title = f"Pct Change for {selected_zone} in {selected_sector} Sector in Year {selected_year} relative to the Growth Scenario"
-else:
-    chart_title = f"Demand for {selected_zone} in {selected_sector} Sector in Year {selected_year}"
+# if selected_analysis == 'Pct Chg':
+#     chart_title = f"Pct Change for {selected_zone} in {selected_sector} Sector in Year {selected_year} relative to the Growth Scenario"
+# else:
+chart_title = f"Demand for {selected_zone} in {selected_sector} Sector in Year {selected_year}"
 
 dynamic_max = filtered_df[yData].max()
 
