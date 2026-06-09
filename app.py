@@ -38,12 +38,10 @@ selected_analysis = st.sidebar.selectbox("Analysis", ['Pct Chg', 'Demand'])
 
 if selected_analysis == 'Pct Chg':
     GOOGLE_DRIVE_FILE_ID = "1SAe0dahXkriO6u76K4NGQfhxEl4UnpFj"
-    chart_title = f"Pct Change for {selected_zone} in {selected_sector} Sector in Year {selected_year} relative to the Growth Scenario"
     yData = 'Percent_Change'
     yaxisTitle = '%'
 else:
     GOOGLE_DRIVE_FILE_ID = "1IWn9IAai4Q5dwN72HU7dVATisH_8F2Ta"
-    chart_title = f"Demand for {selected_zone} in {selected_sector} Sector in Year {selected_year}"
     yData = 'HOURLY_DEMAND'
     yaxisTitle = 'm3/year'
 
@@ -64,6 +62,11 @@ filtered_df = df[
     (df['Sector'] == selected_sector)
 ]
 
+if selected_analysis == 'Pct Chg':
+    chart_title = f"Pct Change for {selected_zone} in {selected_sector} Sector in Year {selected_year} relative to the Growth Scenario"
+else:
+    chart_title = f"Demand for {selected_zone} in {selected_sector} Sector in Year {selected_year}"
+
 dynamic_max = filtered_df[yData].max()
 
 # Add 10% padding so the bars don't touch the very top of the chart
@@ -73,7 +76,7 @@ y_limit = dynamic_max * 1.1
 fig = px.bar(
     filtered_df, x='Day_Hour_Label', y=yData, 
     color='Scenarios', barmode='group',
-    title=f"Demand for {selected_zone} in {selected_sector} Sector in Year {selected_year}",
+    title=chart_title,
     range_y=[0, y_limit]
 )
 
