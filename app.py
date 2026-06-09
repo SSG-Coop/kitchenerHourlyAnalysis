@@ -15,7 +15,7 @@ def load_data_from_gdrive(file_id):
 GOOGLE_DRIVE_FILE_ID = "1IWn9IAai4Q5dwN72HU7dVATisH_8F2Ta"
 
 df = load_data_from_gdrive(GOOGLE_DRIVE_FILE_ID)
-print(df)
+print(df.info())
 
 unique_zones = df['Zone'].unique()
 reordered_zones = ['TOTAL'] + [zone for zone in unique_zones if zone != 'TOTAL']
