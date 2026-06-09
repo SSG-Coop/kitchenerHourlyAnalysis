@@ -32,16 +32,9 @@ def load_large_data_from_gdrive(file_id):
         
     return df
 
-
-unique_zones = df['Zone'].unique()
-reordered_zones = ['TOTAL'] + [zone for zone in unique_zones if zone != 'TOTAL']
-
 # 2. Sidebar Widgets
 st.sidebar.title("Filters")
-selected_analysis = st.sidebar.selectbox("Year", ['Pct Chg', 'Demand'])
-selected_year = st.sidebar.selectbox("Year", df['YEAR'].unique())
-selected_sector = st.sidebar.selectbox("Year", df['Sector'].unique())
-selected_zone = st.sidebar.selectbox("Zone", reordered_zones)
+selected_analysis = st.sidebar.selectbox("Analysis", ['Pct Chg', 'Demand'])
 
 if selected_analysis == 'Pct Chg':
     GOOGLE_DRIVE_FILE_ID = "1SAe0dahXkriO6u76K4NGQfhxEl4UnpFj"
@@ -55,6 +48,13 @@ else:
     yaxisTitle = 'm3/year'
 
 df = load_large_data_from_gdrive(GOOGLE_DRIVE_FILE_ID)
+
+unique_zones = df['Zone'].unique()
+reordered_zones = ['TOTAL'] + [zone for zone in unique_zones if zone != 'TOTAL']
+
+selected_year = st.sidebar.selectbox("Year", df['YEAR'].unique())
+selected_sector = st.sidebar.selectbox("Year", df['Sector'].unique())
+selected_zone = st.sidebar.selectbox("Zone", reordered_zones)
 
 
 # 3. Filter Data
