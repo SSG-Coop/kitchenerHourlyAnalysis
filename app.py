@@ -2,7 +2,6 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 import gdown
-import os
 
 st.set_page_config(layout="wide")
 
@@ -33,18 +32,30 @@ def load_large_data_from_gdrive(file_id):
         
     return df
 
-GOOGLE_DRIVE_FILE_ID = "1IWn9IAai4Q5dwN72HU7dVATisH_8F2Ta"
-
-df = load_large_data_from_gdrive(GOOGLE_DRIVE_FILE_ID)
 
 unique_zones = df['Zone'].unique()
 reordered_zones = ['TOTAL'] + [zone for zone in unique_zones if zone != 'TOTAL']
 
 # 2. Sidebar Widgets
 st.sidebar.title("Filters")
+selected_analysis = st.sidebar.selectbox("Year", ['Pct Chg', 'Demand'])
 selected_year = st.sidebar.selectbox("Year", df['YEAR'].unique())
 selected_sector = st.sidebar.selectbox("Year", df['Sector'].unique())
 selected_zone = st.sidebar.selectbox("Zone", reordered_zones)
+
+if selected_analysis == 'Pct Chg':
+    GOOGLE_DRIVE_FILE_ID = "1SAe0dahXkriO6u76K4NGQfhxEl4UnpFj"
+    chart_title = f"Pct Change for {selected_zone} in {selected_sector} Sector in Year {selected_year} relative to the Growth Scenario"
+    yData = 'Percent_Change'
+    yaxisTitle = '%'
+else:
+    GOOGLE_DRIVE_FILE_ID = "1IWn9IAai4Q5dwN72HU7dVATisH_8F2Ta"
+    chart_title = f"Demand for {selected_zone} in {selected_sector} Sector in Year {selected_year}"
+    yData = 'HOURLY_DEMAND'
+    yaxisTitle = 'm3/year'
+
+df = load_large_data_from_gdrive(GOOGLE_DRIVE_FILE_ID)
+
 
 # 3. Filter Data
 filtered_df = df[
@@ -53,19 +64,20 @@ filtered_df = df[
     (df['Sector'] == selected_sector)
 ]
 
-dynamic_max = filtered_df['HOURLY_DEMAND'].max()
+dynamic_max = filtered_df[yData].max()
+
 # Add 10% padding so the bars don't touch the very top of the chart
 y_limit = dynamic_max * 1.1
     
 # 4. Create Plot
 fig = px.bar(
-    filtered_df, x='Day_Hour_Label', y='HOURLY_DEMAND', 
+    filtered_df, x='Day_Hour_Label', y=yData, 
     color='Scenarios', barmode='group',
     title=f"Demand for {selected_zone} in {selected_sector} Sector in Year {selected_year}",
     range_y=[0, y_limit]
 )
 
-fig.update_layout(height=800)
+fig.update_layout(height=800, yaxis_title=yaxisTitle)
 
 # 5. Display Plot
-st.plotly_chart(fig, width='stretch')
+st.plotly_chart(fig, use_container_width=True)
