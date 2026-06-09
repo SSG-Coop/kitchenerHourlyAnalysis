@@ -16,15 +16,20 @@ GOOGLE_DRIVE_FILE_ID = "1IWn9IAai4Q5dwN72HU7dVATisH_8F2Ta"
 
 df = load_data_from_gdrive(GOOGLE_DRIVE_FILE_ID)
 
+unique_zones = df['Zone'].unique()
+reordered_zones = ['TOTAL'] + [zone for zone in unique_zones if zone != 'TOTAL']
+
 # 2. Sidebar Widgets
 st.sidebar.title("Filters")
 selected_year = st.sidebar.selectbox("Year", df['YEAR'].unique())
-selected_zone = st.sidebar.selectbox("Zone", df['Zone'].unique())
+selected_sector = st.sidebar.selectbox("Year", df['Sector'].unique())
+selected_zone = st.sidebar.selectbox("Zone", reordered_zones)
 
 # 3. Filter Data
 filtered_df = df[
     (df['YEAR'] == selected_year) & 
-    (df['Zone'] == selected_zone)
+    (df['Zone'] == selected_zone) & 
+    (df['Sector'] == selected_sector)
 ]
 
 dynamic_max = filtered_df['HOURLY_DEMAND'].max()
@@ -35,7 +40,7 @@ y_limit = dynamic_max * 1.1
 fig = px.bar(
     filtered_df, x='Day_Hour_Label', y='HOURLY_DEMAND', 
     color='Scenarios', barmode='group',
-    title=f"Demand for {selected_zone} in Year {selected_year}",
+    title=f"Demand for {selected_zone} in {selected_sector} Sector in Year {selected_year}",
     range_y=[0, y_limit]
 )
 
