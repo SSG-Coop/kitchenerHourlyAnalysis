@@ -52,21 +52,22 @@ unique_zones = df['Zone'].unique()
 reordered_zones = ['TOTAL'] + [zone for zone in unique_zones if zone != 'TOTAL']
 
 selected_year = st.sidebar.selectbox("Year", df['YEAR'].unique())
-selected_sector = st.sidebar.selectbox("Year", df['Sector'].unique())
+# selected_sector = st.sidebar.selectbox("Year", df['Sector'].unique())
 selected_zone = st.sidebar.selectbox("Zone", reordered_zones)
 
 
 # 3. Filter Data
 filtered_df = df[
     (df['YEAR'] == selected_year) & 
-    (df['Zone'] == selected_zone) & 
-    (df['Sector'] == selected_sector)
+    (df['Zone'] == selected_zone) 
+    # (df['Sector'] == selected_sector)
 ]
 
 # if selected_analysis == 'Pct Chg':
 #     chart_title = f"Pct Change for {selected_zone} in {selected_sector} Sector in Year {selected_year} relative to the Growth Scenario"
 # else:
-chart_title = f"Demand for {selected_zone} in {selected_sector} Sector in Year {selected_year}"
+# chart_title = f"Demand for {selected_zone} in {selected_sector} Sector in Year {selected_year}"
+chart_title = f"Demand for {selected_zone} in Year {selected_year}"
 
 dynamic_max = filtered_df[yData].max()
 
